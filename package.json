@@ -40,5 +40,16 @@
     "setupFiles": [
       "./jestSetupFile.js"
     ]
+  },
+  "checkSubmission": {
+    "ex": "4",
+    "students": [
+        {"id": "305164923", "fullName": "Yuval Ozeri", "email": "yuuval@gmail.com"},
+        {"id": "309743201", "fullName": "Edan Azran", "email": "edanazran@gmail.com"}
+    ],
+    "os": "Windows",
+    "device": "Android",
+    "deliveryDate": "07/01/2019",
+    "delay": false
   }
 }
