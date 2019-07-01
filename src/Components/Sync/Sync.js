@@ -29,7 +29,7 @@ class Sync extends Component {
     this.handleSetPhoneNumber = this.handleSetPhoneNumber.bind(this)
   }
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: <Image source={require('../../Images/logo2.png')} style={styles.logo2} />,
+    headerTitle: <Image source={require('../../Images/logo3.png')} style={styles.logo2} />,
     headerStyle: {
       backgroundColor: '#6441a5',
       height: 60

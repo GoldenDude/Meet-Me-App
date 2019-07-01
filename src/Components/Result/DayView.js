@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import SyncActions from '../Sync/SyncActions'
 import RNCalendarEvents from 'react-native-calendar-events'
-import { Portal, Dialog, Button, Provider, Snackbar } from 'react-native-paper'
 import { View, TouchableOpacity, Image, ScrollView, Text } from 'react-native'
+import { Portal, Dialog, Button, Provider, Snackbar } from 'react-native-paper'
 
 const mapStateToProps = ({ Form, Result }) => {
   return {
@@ -27,7 +27,8 @@ class DayView extends Component {
       snackVisible: false,
       morning: false,
       noon: false,
-      evening: false
+      evening: false,
+      night: false
     }
 
     this.eachFree = this.eachFree.bind(this)
@@ -41,24 +42,31 @@ class DayView extends Component {
     let starting = 0
     dayPicked.freeTime.map(free => {
       const start = new Date(free.start)
-      if (start.getUTCHours() >= 8 && start.getUTCHours() < 12) {
-        starting = 8
+      if (start.getUTCHours() >= 6 && start.getUTCHours() < 12) {
+        starting = 6
       }
-      if (start.getUTCHours() >= 12 && start.getUTCHours() < 18) {
+      if (start.getUTCHours() >= 12 && start.getUTCHours() < 17) {
         starting = 12
       }
-      if (start.getUTCHours() >= 18 && start.getUTCHours() < 23) {
-        starting = 18
+      if (start.getUTCHours() >= 17 && start.getUTCHours() < 20) {
+        starting = 17
+      }
+      if (start.getUTCHours() >= 20 && start.getUTCHours() < 24) {
+        starting = 20
       }
       switch (starting) {
-        case 8:
+        case 6:
           if (this.state.morning === false) this.setState({ morning: true })
           break
         case 12:
           if (this.state.noon === false) this.setState({ noon: true })
           break
-        case 18:
+        case 17:
           if (this.state.evening === false) this.setState({ evening: true })
+          break
+        case 20:
+          if (this.state.night === false) this.setState({ night: true })
+          break
       }
 
       return null
@@ -114,7 +122,9 @@ class DayView extends Component {
   eachFree(free, starting, to, i) {
     const start = new Date(free.start)
     const finish = new Date(free.finish)
-    if (start.getUTCHours() < starting || start.getUTCHours() >= to) {
+    const startHour = start.getUTCHours() === 0 ? 24 : start.getUTCHours()
+
+    if (startHour < starting || startHour >= to) {
       return
     }
 
@@ -172,22 +182,29 @@ class DayView extends Component {
       <View style={styles.HomePage}>
         <ScrollView>
           <View style={styles.minWidth}>
-            <Image style={styles.timePhoto} source={require('../../Images/morning2.png')} />
+            <Image style={styles.timePhoto} source={require('../../Images/morning.png')} />
             {this.state.morning ? (
-              dayPicked.freeTime.map((free, i) => this.eachFree(free, 8, 12, i))
+              dayPicked.freeTime.map((free, i) => this.eachFree(free, 6, 12, i))
             ) : (
               <Text>NO MATCH FOUND :(</Text>
             )}
-            <Image style={styles.timePhoto} source={require('../../Images/noon2.png')} />
+            <Image style={styles.timePhoto} source={require('../../Images/noon.png')} />
             {this.state.noon ? (
-              dayPicked.freeTime.map((free, i) => this.eachFree(free, 12, 18, i))
+              dayPicked.freeTime.map((free, i) => this.eachFree(free, 12, 17, i))
             ) : (
               <Text>NO MATCH FOUND :(</Text>
             )}
 
-            <Image style={styles.timePhoto} source={require('../../Images/noon2.png')} />
+            <Image style={styles.timePhoto} source={require('../../Images/evening.png')} />
             {this.state.evening ? (
-              dayPicked.freeTime.map((free, i) => this.eachFree(free, 18, 23, i))
+              dayPicked.freeTime.map((free, i) => this.eachFree(free, 17, 20, i))
+            ) : (
+              <Text>NO MATCH FOUND :(</Text>
+            )}
+
+            <Image style={styles.timePhoto} source={require('../../Images/night.png')} />
+            {this.state.night ? (
+              dayPicked.freeTime.map((free, i) => this.eachFree(free, 20, 24, i))
             ) : (
               <Text>NO MATCH FOUND :(</Text>
             )}
